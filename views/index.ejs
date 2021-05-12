@@ -34,12 +34,38 @@
       </div>
 
       <div v-if="afterConnected == true">
+        <div style="position: absolute; top: 0; right: 0; margin: 5px">
+          <h1 v-if="run_Condition_Value == 1">you: x</h1>
+
+          <h1 v-if="run_Condition_Value == 0">you: o</h1>
+
+          <div v-if="run_Condition_permission_hide == false">
+            <h1 v-if="run_Condition_permission == false">
+              another one's turn..
+            </h1>
+
+            <h1 v-if="run_Condition_permission == true">your's turn..</h1>
+          </div>
+        </div>
+
         <div id="gameDiv">
           <div><%- include('row_divs/row_divs1.ejs') %></div>
 
           <div><%- include('row_divs/row_divs2.ejs') %></div>
 
           <div><%- include('row_divs/row_divs3.ejs') %></div>
+        </div>
+      </div>
+
+      <div id="winnerAnounceId" v-if="winnerAnounce == true">
+        <div><h1>Alhamdulillah the winner!</h1></div>
+
+        <div v-if="golActive == true">
+          <h1><span id="spanH1">o</span></h1>
+        </div>
+
+        <div v-if="golActive == false">
+          <h1><span id="spanH1">x</span></h1>
         </div>
       </div>
     </div>

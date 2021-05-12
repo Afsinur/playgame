@@ -114,3 +114,24 @@ h1 {
 .value_container #IDdiv {
   display: none;
 }
+
+#winnerAnounceId {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#winnerAnounceId #spanH1,
+#winnerAnounceId h1 {
+  text-align: center;
+}
+
+#winnerAnounceId #spanH1 {
+  font-size: 25vh;
+}

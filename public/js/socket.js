@@ -16,15 +16,176 @@ const app = {
       gameStarterID: null,
       afterConnected: false,
       activeID: 0,
-      recentPlayers: [],
       receiveActivated: false,
       run_Condition_Value: null,
       run_Condition_permission: null,
+      winnerAnounce: false,
+      golActive: null,
+      runFunctionActive: true,
+      run_Condition_permission_hide: false,
     };
   },
 
   methods: {
-    common_run(e, e1, e2, e3, e4) {
+    commonWinnerActivation(e) {
+      this.runFunctionActive = false;
+      this.winnerAnounce = true;
+      this.run_Condition_permission_hide = true;
+
+      if (e == 1) {
+        this.golActive = true;
+      } else {
+        this.golActive = false;
+      }
+    },
+
+    commonGolNotgol(gol, notgol) {
+      //gol
+      var mil_1 = gol.includes("1");
+      var mil_2 = gol.includes("2");
+      var mil_3 = gol.includes("3");
+      var mil_4 = gol.includes("4");
+      var mil_5 = gol.includes("5");
+      var mil_6 = gol.includes("6");
+      var mil_7 = gol.includes("7");
+      var mil_8 = gol.includes("8");
+      var mil_9 = gol.includes("9");
+
+      //notgol
+      var mil_1not = notgol.includes("1");
+      var mil_2not = notgol.includes("2");
+      var mil_3not = notgol.includes("3");
+      var mil_4not = notgol.includes("4");
+      var mil_5not = notgol.includes("5");
+      var mil_6not = notgol.includes("6");
+      var mil_7not = notgol.includes("7");
+      var mil_8not = notgol.includes("8");
+      var mil_9not = notgol.includes("9");
+
+      //gol conditions
+      if (mil_1 && mil_2 && mil_3) {
+        this.commonWinnerActivation(1);
+      }
+      if (mil_4 && mil_5 && mil_6) {
+        this.commonWinnerActivation(1);
+      }
+      if (mil_7 && mil_8 && mil_9) {
+        this.commonWinnerActivation(1);
+      }
+      if (mil_3 && mil_6 && mil_9) {
+        this.commonWinnerActivation(1);
+      }
+      if (mil_2 && mil_5 && mil_8) {
+        this.commonWinnerActivation(1);
+      }
+      if (mil_1 && mil_4 && mil_7) {
+        this.commonWinnerActivation(1);
+      }
+      if (mil_1 && mil_5 && mil_9) {
+        this.commonWinnerActivation(1);
+      }
+      if (mil_3 && mil_5 && mil_7) {
+        this.commonWinnerActivation(1);
+      }
+
+      //notgol conditions
+      if (mil_1not && mil_2not && mil_3not) {
+        this.commonWinnerActivation(0);
+      }
+      if (mil_4not && mil_5not && mil_6not) {
+        this.commonWinnerActivation(0);
+      }
+      if (mil_7not && mil_8not && mil_9not) {
+        this.commonWinnerActivation(0);
+      }
+      if (mil_3not && mil_6not && mil_9not) {
+        this.commonWinnerActivation(0);
+      }
+      if (mil_2not && mil_5not && mil_8not) {
+        this.commonWinnerActivation(0);
+      }
+      if (mil_1not && mil_4not && mil_7not) {
+        this.commonWinnerActivation(0);
+      }
+      if (mil_1not && mil_5not && mil_9not) {
+        this.commonWinnerActivation(0);
+      }
+      if (mil_3not && mil_5not && mil_7not) {
+        this.commonWinnerActivation(0);
+      }
+    },
+
+    winnerCheck(e, e1) {
+      var pNode1, pNode_id1;
+      var gol = [];
+      var notgol = [];
+
+      if (e1 != 0) {
+        e.forEach((e) => {
+          pNode1 = e.parentNode;
+          pNode_id1 = pNode1.id;
+          var countEnterGolORnotGol = 0;
+
+          //pNode1.children.length
+          for (let index = 0; index < pNode1.children.length; index++) {
+            const element = pNode1.children[index];
+
+            if (element.attributes.style) {
+              if (element.attributes.style.value == "display: block;") {
+                if (element.id == "insideDiv2") {
+                  //pNode_id1
+                  gol.push(e.innerHTML);
+                } else {
+                  //pNode_id1
+                  if (countEnterGolORnotGol < 1) {
+                    countEnterGolORnotGol++;
+
+                    notgol.push(e.innerHTML);
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        this.commonGolNotgol(gol, notgol);
+      } else {
+        var VAL_containerDiv1 = document.querySelectorAll(
+          ".value_container #IDdiv"
+        );
+
+        VAL_containerDiv1.forEach((e) => {
+          pNode1 = e.parentNode;
+          pNode_id1 = pNode1.id;
+          var countEnterGolORnotGol = 0;
+
+          //pNode1.children.length
+          for (let index = 0; index < pNode1.children.length; index++) {
+            const element = pNode1.children[index];
+
+            if (element.attributes.style) {
+              if (element.attributes.style.value == "display: block;") {
+                if (element.id == "insideDiv2") {
+                  //pNode_id1
+                  gol.push(e.innerHTML);
+                } else {
+                  //pNode_id1
+                  if (countEnterGolORnotGol < 1) {
+                    countEnterGolORnotGol++;
+
+                    notgol.push(e.innerHTML);
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        this.commonGolNotgol(gol, notgol);
+      }
+    },
+
+    common_run(e, e1, e2, e3, e4, e5) {
       if (e != 0) {
         e1.children[0].style.display = "block";
         e1.children[1].style.display = "block";
@@ -52,6 +213,12 @@ const app = {
 
           socket.emit("obj_game_info", obj_game_info);
         }
+
+        if (this.run_Condition_permission == true) {
+          this.winnerCheck(e5, null);
+        } else {
+          this.winnerCheck(null, 0);
+        }
       } else {
         e1.children[2].style.display = "block";
 
@@ -73,38 +240,61 @@ const app = {
 
           socket.emit("obj_game_info1", obj_game_info1);
         }
+
+        if (this.run_Condition_permission == true) {
+          this.winnerCheck(e5, null);
+        } else {
+          this.winnerCheck(null, 0);
+        }
       }
     },
 
     run(e1) {
-      var VAL_containerDiv = document.querySelectorAll(
-        ".value_container #IDdiv"
-      );
-      var condition1 = this.run_Condition_Value;
-      VAL_containerDiv.forEach((e) => {
-        var pNode = e.parentNode;
-        var pNode_id = pNode.id;
-        if (pNode.id.includes(e1.toString())) {
-          if (condition1 == 1) {
-            if (this.run_Condition_permission == true) {
-              if (pNode.children[2].style.display == "none") {
-                this.common_run(condition1, pNode, pNode_id, e1, 1);
-                this.run_Condition_permission = false;
+      if (this.runFunctionActive == true) {
+        var VAL_containerDiv = document.querySelectorAll(
+          ".value_container #IDdiv"
+        );
+        var condition1 = this.run_Condition_Value;
+        VAL_containerDiv.forEach((e) => {
+          var pNode = e.parentNode;
+          var pNode_id = pNode.id;
+
+          if (pNode.id.includes(e1.toString())) {
+            if (condition1 == 1) {
+              if (this.run_Condition_permission == true) {
+                if (pNode.children[2].style.display == "none") {
+                  this.common_run(
+                    condition1,
+                    pNode,
+                    pNode_id,
+                    e1,
+                    1,
+                    VAL_containerDiv
+                  );
+                  this.run_Condition_permission = false;
+                }
               }
-            }
-          } else {
-            if (this.run_Condition_permission == true) {
-              if (
-                pNode.children[0].style.display == "none" &&
-                pNode.children[1].style.display == "none"
-              ) {
-                this.common_run(condition1, pNode, pNode_id, e1, 0);
-                this.run_Condition_permission = false;
+            } else {
+              if (this.run_Condition_permission == true) {
+                if (
+                  pNode.children[0].style.display == "none" &&
+                  pNode.children[1].style.display == "none"
+                ) {
+                  this.common_run(
+                    condition1,
+                    pNode,
+                    pNode_id,
+                    e1,
+                    0,
+                    VAL_containerDiv
+                  );
+                  this.run_Condition_permission = false;
+                }
               }
             }
           }
-        }
-      });
+        });
+      }
     },
 
     connectGame(e) {
@@ -177,12 +367,14 @@ const app = {
 
     socket.on("obj_game_info", ({ condition1, pNode_id, e3, permit }) => {
       var ID_country = document.querySelector(`#${pNode_id}`);
+
       this.common_run(condition1, ID_country, pNode_id, e3, null);
       this.run_Condition_permission = permit;
     });
 
     socket.on("obj_game_info1", ({ condition1, pNode_id, e3, permit }) => {
       var ID_country = document.querySelector(`#${pNode_id}`);
+
       this.common_run(condition1, ID_country, pNode_id, e3, null);
       this.run_Condition_permission = permit;
     });
