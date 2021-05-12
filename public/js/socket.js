@@ -89,6 +89,12 @@ const app = {
       }
 
       //notgol conditions
+      if (notgol.length >= 5) {
+        this.runFunctionActive = false;
+        this.winnerAnounce = true;
+        this.run_Condition_permission_hide = true;
+        this.golActive = null;
+      }
       if (mil_1not && mil_2not && mil_3not) {
         this.commonWinnerActivation(0);
       }
